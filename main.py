@@ -4,12 +4,17 @@ from grafo import Grafo
 nombre_archivo = input("Nombre del archivo de laberinto a cargar: ").strip()
 
 try:
-    coordenadaSalida, matriz = l.leer_laberinto(nombre_archivo)
+    resultado = l.leer_laberinto(nombre_archivo)
 except FileNotFoundError:
     print(f"No se encontró el archivo '{nombre_archivo}'.")
     raise SystemExit(1)
 
-# Buscar en la matriz las celdas reales de salida (2) y meta (3)
+if resultado is None: #leer_laberinto ya reportó el motivo del error (columnas o falta de inicio/meta).
+    raise SystemExit(1)
+
+coordenadaSalida, matriz = resultado
+
+# Buscar en la matriz las celdas reales de inicio (2) y meta (3); leer_laberinto ya garantizó que ambas existen.
 nodo_inicio = None
 nodo_final = None
 for fila in range(len(matriz)):
@@ -18,10 +23,6 @@ for fila in range(len(matriz)):
             nodo_inicio = (fila, columna)
         elif matriz[fila][columna] == 3:
             nodo_final = (fila, columna)
-
-if nodo_inicio is None or nodo_final is None:
-    print("El archivo debe contener una celda de salida (valor 2) y una celda de meta (valor 3).")
-    raise SystemExit(1)
 
 lista_adyacencia = l.matriz_a_grafo(matriz)
 grafo = Grafo(lista_adyacencia)

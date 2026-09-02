@@ -27,6 +27,13 @@ def leer_laberinto(nombre_archivo):
                     return None #Detiene la lectura de la matriz en caso de que se halle un error con el número de columnas.
             print("Columnas obtenidas: ", len(matriz[0]))
 
+        #Se valida que el laberinto tenga tanto una celda de inicio (2) como una celda de meta (3).
+        tiene_inicio = any(2 in fila for fila in matriz)
+        tiene_meta = any(3 in fila for fila in matriz)
+        if not tiene_inicio or not tiene_meta:
+            print("Error: el laberinto debe contener una celda de inicio (2) y una celda de meta (3).")
+            return None #Detiene la lectura en caso de que falte la celda de inicio o de meta.
+
         #Retorno de número de filas, número de columnas y matriz.
         return coordenadaSalida, matriz
 
