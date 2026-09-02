@@ -7,7 +7,7 @@ class Grafo:
     def obtener_vecinos(self, v):
         return self.lista_adyacencia[v]
 
-    """funcion de calculo de heuristica: construye la tabla Lista_heuristica
+    """Función de cálculo de heurística: construye la tabla Lista_heuristica
     que contiene la distancia Manhattan de cada nodo del grafo hacia el
     nodo meta. Es admisible y consistente porque solo se permiten
     movimientos ortogonales (arriba, abajo, izquierda, derecha) con costo
@@ -26,8 +26,22 @@ class Grafo:
         return self.heuristica[n]
 
     def primero_profundidad(self, nodo_inicio, nodo_final):
-       #inserte si codigo aqui
-        return None
+       # Pila con tuplas (nodo_actual, camino_recorrido_hasta_ese_nodo)
+        pila = [(nodo_inicio, [nodo_inicio])]
+        visitados = {nodo_inicio}
+
+        while pila:
+            nodo_actual, camino = pila.pop()  # LIFO -> se explora en profundidad
+
+            if nodo_actual == nodo_final:
+                return camino  # se llegó a la meta, se retorna la ruta completa
+
+            for vecino in self.obtener_vecinos(nodo_actual):
+                if vecino not in visitados:
+                    visitados.add(vecino)
+                    pila.append((vecino, camino + [vecino]))
+
+        return None  # no existe una ruta entre inicio y final
         
     def primero_anchura(self, nodo_inicio, nodo_final):
 
@@ -61,6 +75,37 @@ class Grafo:
         return recorridoBFS
     
     def a_estrella(self, nodo_inicio, nodo_final):
-       #inserte si codigo aqui
-        return None
+        import heapq #Cola de prioridad: siempre extrae el nodo con menor f(n) = g(n) + h(n).
+
+        self.calcular_heuristica(nodo_final) #Se asegura que la tabla de heurística esté calculada hacia el nodo_final actual.
+
+        g = {nodo_inicio: 0} #Costo real acumulado desde el inicio hasta cada nodo conocido.
+        padres = {} #Predecesores de cada nodo, para reconstruir la ruta al finalizar.
+        cerrados = set() #Nodos ya expandidos de forma definitiva (con su menor costo confirmado).
+
+        heap = [(self.h(nodo_inicio), nodo_inicio)] #Se inicia el heap con el nodo de inicio, priorizado por f(n).
+
+        while heap:
+            f_actual, nodo_actual = heapq.heappop(heap) #Se extrae el nodo con menor f(n) disponible.
+
+            if nodo_actual == nodo_final: #Al expandir la meta con el menor f(n), se garantiza la ruta óptima.
+                ruta = [nodo_actual]
+                while nodo_actual != nodo_inicio:
+                    nodo_actual = padres[nodo_actual]
+                    ruta.append(nodo_actual) #Se reconstruye la ruta retrocediendo por los padres.
+                return ruta[::-1] #Se invierte para entregarla desde el inicio hasta la meta.
+
+            if nodo_actual in cerrados: #El heap puede contener entradas obsoletas del mismo nodo con peor f(n); se ignoran.
+                continue
+            cerrados.add(nodo_actual)
+
+            for vecino in self.obtener_vecinos(nodo_actual):
+                g_tentativo = g[nodo_actual] + 1 #Cada movimiento en el laberinto cuesta 1.
+
+                if vecino not in g or g_tentativo < g[vecino]: #Se encontró un camino más corto hacia vecino.
+                    g[vecino] = g_tentativo
+                    padres[vecino] = nodo_actual
+                    heapq.heappush(heap, (g_tentativo + self.h(vecino), vecino))
+
+        return None #Se agotó el heap sin alcanzar la meta: no existe ruta entre inicio y final.
     

@@ -1,4 +1,5 @@
 def leer_laberinto(nombre_archivo):
+
     matriz = []
     with open(nombre_archivo, "r") as archivo:
         #Lectura de la primera línea del arhcivo (las coordenadas de la salida del laberinto):
@@ -14,24 +15,43 @@ def leer_laberinto(nombre_archivo):
             fila = list(map(int, linea.split(","))) #Lista con cada uno de los valores (convertidos a enteros) de cada fila de la matriz.
             matriz.append(fila) #Agrega fila por fila a la matriz del laberinto.
 
-        #Impresión de datos para verificación:8
-        print("Fila salida: ", filaSalida)
-        print("Columna salida: ", columnaSalida)
-        print("Filas extraídas: ", len(matriz))
+        #Impresión de datos para verificación:
+        print("\nFilas extraídas: ", len(matriz))
 
         if len(matriz) > 0:
             columnas2 = len(matriz[0])
             for fila in matriz:
                 if len(fila) != columnas2:
-                    print("Error: existe una fila con un número inadecuado de columnas.")
+                    print("Error: existe una fila con un número inadecuado de columnas.\n")
                     return None #Detiene la lectura de la matriz en caso de que se halle un error con el número de columnas.
             print("Columnas obtenidas: ", len(matriz[0]))
 
-        #Retorno de número de filas, número de columnas y matriz.
-        return coordenadaSalida, matriz
+        #Se ubican en la matriz la celda de inicio (2) y la celda de meta (3). Para esa casilla destino, se evalúa si coincide con las coordenadas obtenidas en la primera línea del archivo.
+        nodo_inicio = None
+        nodo_final = None
+        for fila in range(len(matriz)):
+            for columna in range(len(matriz[0])):
+                if matriz[fila][columna] == 2:
+                    nodo_inicio = (fila, columna)
+                elif matriz[fila][columna] == 3:
+                    nodo_final = (fila, columna)
 
+        if nodo_inicio is None or nodo_final is None:
+            print("\nError: el laberinto debe contener una celda de inicio (2) y una celda de meta (3).\n")
+            return None #Detiene la lectura en caso de que falte la celda de inicio o de meta.
+
+        if nodo_final != coordenadaSalida:
+            print("\nError: la coordenada descrita al inicio del archivo como casilla final no coincide con la coordenada de la celda que contiene el número 3 en la matriz.\n")
+            return None #Detiene la lectura bajo la situación en que la celda descrita como final y la verdadera casilla destino no sean consistentes.
+
+        print("\nNodo inicio: ", nodo_inicio)
+        print("Nodo meta: ", nodo_final)
+
+        #Retorno de número de filas, número de columnas y matriz.
+        return nodo_inicio, nodo_final, matriz
 
 def matriz_a_grafo(matriz):
+
     grafo = {} #Establecer un diccionario vacío que contendrá las listas de adyacencia de los nodos del grafo.
     filas = len(matriz)
     columnas = len(matriz[0])
