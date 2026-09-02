@@ -14,3 +14,6 @@ for nodo, vecinos in lista_adyacencia.items():
 
 grafo = Grafo(lista_adyacencia)
 
+print("\nRecorrido BFS:\n")
+primero_anchura = grafo.primero_anchura(next(iter(grafo.lista_adyacencia)), coordenadaSalida)
+print(primero_anchura)
