@@ -12,17 +12,7 @@ except FileNotFoundError:
 if resultado is None: #leer_laberinto ya reportó el motivo del error (columnas o falta de inicio/meta).
     raise SystemExit(1)
 
-coordenadaSalida, matriz = resultado
-
-# Buscar en la matriz las celdas reales de inicio (2) y meta (3); leer_laberinto ya garantizó que ambas existen.
-nodo_inicio = None
-nodo_final = None
-for fila in range(len(matriz)):
-    for columna in range(len(matriz[0])):
-        if matriz[fila][columna] == 2:
-            nodo_inicio = (fila, columna)
-        elif matriz[fila][columna] == 3:
-            nodo_final = (fila, columna)
+nodo_inicio, nodo_final, matriz = resultado
 
 lista_adyacencia = l.matriz_a_grafo(matriz)
 grafo = Grafo(lista_adyacencia)
