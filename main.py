@@ -1,15 +1,15 @@
 import laberinto as l
 from grafo import Grafo
 
-nombre_archivo = input("Nombre del archivo de laberinto a cargar: ").strip()
+nombre_archivo = input("Nombre del archivo de laberinto a cargar: ").strip() #Se solicita al usuario, a través de la líniea de comandos, que ingrese el nombre del archivo a partir del cual se desea realizar la búsqueda de senderos solución.
 
 try:
     resultado_lectura = l.leer_laberinto(nombre_archivo)
 except FileNotFoundError:
-    print(f"\nNo se halló el archivo '{nombre_archivo}'.\n")
+    print(f"\nNo se halló el archivo '{nombre_archivo}'.\n") #Si el archivo referenciado no se encuentra, se emite un mensaje de error y finaliza el programa.
     raise SystemExit(1)
 except ValueError:
-    print(f"\nError: '{nombre_archivo}' no contiene los datos en el formato esperado.\n")
+    print(f"\nError: '{nombre_archivo}' no contiene los datos en el formato esperado.\n") #Si la lectura de la matriz falla porque el formato de los datos no es pertinente, se comunica la falla al usuario y se culmina la ejecución del sistema.
     raise SystemExit(1)
 
 if resultado_lectura is None: #leer_laberinto ya reportó el motivo del error (columnas o falta de inicio/meta)
@@ -22,7 +22,8 @@ nodo_inicio, nodo_final, matriz = resultado_lectura
 lista_adyacencia = l.matriz_a_grafo(matriz)
 grafo = Grafo(lista_adyacencia)
 
-#Recorridos:
+#Aplicación de los algoritmos de recorrido:
+#En cada uno, si no se obtiene una ruta desde el nodo inicio al nodo final, se presenta una línea que establece la inexistencia de solución.
 
 print("\nRecorrido DFS:\n")
 ruta_dfs = grafo.primero_profundidad(nodo_inicio, nodo_final)

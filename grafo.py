@@ -26,22 +26,22 @@ class Grafo:
         return self.heuristica[n]
 
     def primero_profundidad(self, nodo_inicio, nodo_final):
-       # Pila con tuplas (nodo_actual, camino_recorrido_hasta_ese_nodo)
+        #Pila con tuplas (nodo_actual, camino_recorrido_hasta_ese_nodo). La inclusión del camino recorrido permite agregar trazabilidad frente a los caminos que se tienden, para luego reconstruir la ruta.
         pila = [(nodo_inicio, [nodo_inicio])]
         visitados = {nodo_inicio}
 
-        while pila:
-            nodo_actual, camino = pila.pop()  # LIFO -> se explora en profundidad
+        while pila: #Mientras la pila mantenga elementos, de modo que se finalice si no existen más nodos por explorar, aunque aún no se haya identificado la meta (caso grafo no conexo).
+            nodo_actual, camino = pila.pop()  #LIFO -> se explora en profundidad
 
             if nodo_actual == nodo_final:
-                return camino  # se llegó a la meta, se retorna la ruta completa
+                return camino  #Se llegó a la meta, se retorna la ruta completa, que fue almacenada en la tupla del nodo objetivo.
 
             for vecino in self.obtener_vecinos(nodo_actual):
                 if vecino not in visitados:
                     visitados.add(vecino)
-                    pila.append((vecino, camino + [vecino]))
+                    pila.append((vecino, camino + [vecino])) #Expansi+on de los vecinos de cada nodo evaluado. La existencia del set visitados permite que no se ingeresen segmentos que no deberían considerarse, por haberse examinado o incluido a la pila previamente.
 
-        return None  # no existe una ruta entre inicio y final
+        return None  #No existe una ruta entre inicio y final
         
     def primero_anchura(self, nodo_inicio, nodo_final):
 
