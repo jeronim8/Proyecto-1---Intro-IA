@@ -15,6 +15,10 @@ def leer_laberinto(nombre_archivo):
             fila = list(map(int, linea.split(","))) #Lista con cada uno de los valores (convertidos a enteros) de cada fila de la matriz.
             matriz.append(fila) #Agrega fila por fila a la matriz del laberinto.
 
+        if len(matriz) == 0:
+            print("\nNo existe matriz para evaluar.\n")
+            return None
+
         #Impresión de datos para verificación:
         print("\nFilas extraídas: ", len(matriz))
 

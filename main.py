@@ -6,7 +6,10 @@ nombre_archivo = input("Nombre del archivo de laberinto a cargar: ").strip()
 try:
     resultado_lectura = l.leer_laberinto(nombre_archivo)
 except FileNotFoundError:
-    print(f"No se halló el archivo '{nombre_archivo}'.\n")
+    print(f"\nNo se halló el archivo '{nombre_archivo}'.\n")
+    raise SystemExit(1)
+except ValueError:
+    print(f"\nError: '{nombre_archivo}' no contiene los datos en el formato esperado.\n")
     raise SystemExit(1)
 
 if resultado_lectura is None: #leer_laberinto ya reportó el motivo del error (columnas o falta de inicio/meta)
