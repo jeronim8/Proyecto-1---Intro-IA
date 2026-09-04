@@ -1,3 +1,18 @@
+"""
+Archivo laberinto.py
+--------------------------
+Proyecto 1
+Introducción a la IA
+--------------------------
+Presentado por:
+Jerónimo Ochoa Cruz
+Valeria Herrera
+Gustavo Aguilar
+Pedro Cristos
+--------------------------
+2 de septiembre del 2026
+"""
+
 def leer_laberinto(nombre_archivo):
 
     matriz = []
@@ -54,6 +69,26 @@ def leer_laberinto(nombre_archivo):
         #Retorno de número de filas, número de columnas y matriz.
         return nodo_inicio, nodo_final, matriz
 
+def recursion_vecinos(peso_arista, movimientos, matriz, coordenada_actual, coordenada_anterior, grafo):
+
+    if coordenada_actual in grafo:
+        return (coordenada_actual, peso_arista) #Si se arriba a otro nodo perteneciente al grafo, entonces se tiende una arista.
+
+    fila_actual, columna_actual = coordenada_actual
+
+    #Buscar la continuación del pasillo
+    for movimiento_fila, movimiento_columna in movimientos:
+        fila_vecino = fila_actual + movimiento_fila
+        columna_vecino = columna_actual + movimiento_columna
+        if (0 <= fila_vecino < len(matriz) and 0 <= columna_vecino < len(matriz[0]) and matriz[fila_vecino][columna_vecino] != 1):
+            coordenada_vecino = (fila_vecino, columna_vecino)
+            if coordenada_vecino == coordenada_anterior:
+                continue #No retornar al flujo del que se proviene, para evitar bucles infinitos
+
+            return recursion_vecinos(peso_arista + 1, movimientos, matriz, coordenada_vecino, coordenada_actual, grafo)
+
+    return None
+
 def matriz_a_grafo(matriz):
 
     grafo = {} #Establecer un diccionario vacío que contendrá las listas de adyacencia de los nodos del grafo.
@@ -67,22 +102,36 @@ def matriz_a_grafo(matriz):
         (0, 1), #Derecha
     ]
 
+    #Cálculo de grados de las casillas de los grafos
     for fila in range(filas):
         for columna in range(columnas):
 
-            if matriz[fila][columna] == 1: #Las paredes no han de considerarse como nodos.
+            if matriz[fila][columna] == 1:
                 continue
 
-            nodo_actual = (fila, columna) #Se seleccionan las coordenadas de un nodo en el laberinto.
-            grafo[nodo_actual] = [] #Se crea una nueva entrada para definir la lista de adyaciencia correspondiente al nodo_actual.
+            numero_vecinos = 0
 
-            for movimiento_fila, movimiento_columna in movimientos: #Se evalúan todos los potenciales vecinos del nodo analizado.
+            for movimiento_fila, movimiento_columna in movimientos:
                 nueva_fila = fila + movimiento_fila
                 nueva_columna = columna + movimiento_columna
 
-                if(0 <= nueva_fila < filas and 0 <= nueva_columna < columnas and matriz[nueva_fila][nueva_columna] != 1): #Si su vecino se encuentra dentro de la matriz y no es una pared, entonces, agregarlo a la correspondiente lista de adyacencia.
-                    vecino = (nueva_fila, nueva_columna)
-                    grafo[nodo_actual].append(vecino)
+                if (0 <= nueva_fila < filas and 0 <= nueva_columna < columnas and matriz[nueva_fila][nueva_columna] != 1):
+                    numero_vecinos += 1
 
+            if numero_vecinos != 2 or matriz[fila][columna] == 2 or matriz[fila][columna] == 3:
+                grafo[(fila, columna)] = [] #Se incluyen al conjunto de nodos únicamente si son bifurcaciones o espacios terminales, o si se trata del inicio o el final
+
+    #Creación de las listas de adyacencia para cada nodo:
+    for nodo_actual in grafo:
+        fila_n, columna_n = nodo_actual
+        for movimiento_fila, movimiento_columna in movimientos:
+            nueva_fila = fila_n + movimiento_fila
+            nueva_columna = columna_n + movimiento_columna
+            if (0 <= nueva_fila < filas and 0 <= nueva_columna < columnas and matriz[nueva_fila][nueva_columna] != 1):
+                coordenada_actual = (nueva_fila, nueva_columna)
+                nuevo_vecino = recursion_vecinos(1, movimientos, matriz, coordenada_actual, nodo_actual, grafo)
+                if nuevo_vecino is not None:
+                    grafo[nodo_actual].append(nuevo_vecino)
+    
     #Regresar la lista de adyacencia.
     return grafo

@@ -1,3 +1,18 @@
+"""
+Archivo grafo.py
+--------------------------
+Proyecto 1
+Introducción a la IA
+--------------------------
+Presentado por:
+Jerónimo Ochoa Cruz
+Valeria Herrera
+Gustavo Aguilar
+Pedro Cristos
+--------------------------
+2 de septiembre del 2026
+"""
+
 class Grafo:
 
     def __init__(self, lista_adyacencia):
