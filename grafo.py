@@ -114,8 +114,8 @@ class Grafo:
                 continue
             cerrados.add(nodo_actual)
 
-            for vecino in self.obtener_vecinos(nodo_actual):
-                g_tentativo = g[nodo_actual] + 1 #Cada movimiento en el laberinto cuesta 1.
+            for vecino, peso in self.obtener_vecinos(nodo_actual):
+                g_tentativo = g[nodo_actual] + peso #El costo del tramo ahora es el peso de la arista (longitud del pasillo hasta el siguiente nodo relevante).
 
                 if vecino not in g or g_tentativo < g[vecino]: #Se encontró un camino más corto hacia vecino.
                     g[vecino] = g_tentativo
