@@ -1,5 +1,6 @@
 """
 Archivo main.py
+MODIFICADO
 --------------------------
 Proyecto 1
 Introducción a la IA
@@ -10,7 +11,7 @@ Valeria Herrera
 Gustavo Aguilar
 Pedro Cristos
 --------------------------
-2 de septiembre del 2026
+3 de septiembre del 2026
 """
 
 import laberinto as l
