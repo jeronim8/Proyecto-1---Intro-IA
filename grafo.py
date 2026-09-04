@@ -51,7 +51,7 @@ class Grafo:
             if nodo_actual == nodo_final:
                 return camino  #Se llegó a la meta, se retorna la ruta completa, que fue almacenada en la tupla del nodo objetivo.
 
-            for vecino in self.obtener_vecinos(nodo_actual):
+            for vecino, peso in self.obtener_vecinos(nodo_actual):
                 if vecino not in visitados:
                     visitados.add(vecino)
                     pila.append((vecino, camino + [vecino])) #Expansi+on de los vecinos de cada nodo evaluado. La existencia del set visitados permite que no se ingeresen segmentos que no deberían considerarse, por haberse examinado o incluido a la pila previamente.

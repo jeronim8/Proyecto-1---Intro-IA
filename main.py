@@ -40,7 +40,7 @@ grafo = Grafo(lista_adyacencia)
 for nodo, vecinos in grafo.lista_adyacencia.items():
     print(f"{nodo}: {vecinos}")
 
-""""
+
 #Aplicación de los algoritmos de recorrido:
 #En cada uno, si no se obtiene una ruta desde el nodo inicio al nodo final, se presenta una línea que establece la inexistencia de solución.
 
@@ -51,7 +51,7 @@ if ruta_dfs:
     print(ruta_dfs)
 else:
     print("No se encontró una ruta mediante DFS.")
-
+"""
 print("\nRecorrido BFS:\n")
 ruta_bfs = grafo.primero_anchura(nodo_inicio, nodo_final)
 if ruta_bfs:
@@ -68,4 +68,4 @@ if ruta_a_estrella:
 else:
     print("No se encontró una ruta mediante A*.\n")
 
-"""
+    """
